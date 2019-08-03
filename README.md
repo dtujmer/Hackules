@@ -1,6 +1,6 @@
 A page for publishing what I'm learning and what I've learned. 
 
-[List of solved Bandit wargames](Hackules/bandit)
+[List of solved Bandit wargames](github.io/dtujmer/Hackules/bandit)
 
 
 TODO:
